@@ -1,24 +1,22 @@
-export function init(explorer) {
-    explorer.nav.wrap.selectAll('*').remove();
+export function init() {
+    const main = this;
 
-    var chartNav = explorer.nav.wrap.append('ul').attr('class', 'ses-nav ses-nav-tabs');
+    this.nav.wrap.selectAll('*').remove();
 
-    var chartNavItems = chartNav
+    const chartNav = this.nav.wrap.append('ul').attr('class', 'ses-nav ses-nav-tabs');
+
+    const chartNavItems = chartNav
         .selectAll('li')
-        .data(explorer.charts.renderers)
+        .data(this.charts.renderers)
         .enter()
         .append('li')
-        .classed('active', function(d, i) {
-            return d.name === explorer.config.initial_renderer.name;
-        });
+        .classed('active', (d,i) => d.name === this.config.initial_renderer.name);
 
-    chartNavItems.append('a').text(function(d) {
-        return d.label;
-    });
+    chartNavItems.append('a').text(d => d.label);
 
     chartNavItems.on('click', function(d) {
         if (!d3.select(this).classed('active')) {
-            explorer.chartWrap.selectAll('*').remove();
+            main.chartWrap.selectAll('*').remove();
             chartNavItems.classed('active', false);
             d3.select(this).classed('active', true);
             d.render();

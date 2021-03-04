@@ -3,6 +3,12 @@
 \------------------------------------------------------------------------------------------------*/
 
 export function layout() {
+    //create wrapper in specified div
+    this.wrap = d3
+        .select(this.element)
+        .append('div')
+        .attr('class', 'safety-explorer');
+
     if (this.config.title)
         this.wrap
             .append('h1')

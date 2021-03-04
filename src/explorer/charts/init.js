@@ -1,11 +1,11 @@
 import { prepSettings } from './prepSettings';
 
-export function init(explorer) {
-    prepSettings(explorer);
-    explorer.charts.renderers.forEach(function(renderer) {
+export function init() {
+    prepSettings.call(this);
+    this.charts.renderers.forEach(renderer => {
         //link the data
         if (renderer.name == 'web-codebook') {
-            renderer.settings.files = explorer.data.map(function(d) {
+            renderer.settings.files = this.data.map(d => {
                 d['Data'] = d.type;
                 d.Rows = d.raw.length;
                 d.Columns = Object.keys(d.raw[0]).length;
@@ -14,40 +14,40 @@ export function init(explorer) {
             });
             renderer.dataFile = null;
         } else {
-            renderer.dataFile = explorer.data.filter(function(d) {
+            renderer.dataFile = this.data.filter(d => {
                 return d.type == renderer.data;
             })[0];
         }
 
         //add render method
         //     var mainFunction = cat.controls.mainFunction.node().value;
-        renderer.render = function() {
+        renderer.render = () => {
             if (renderer.sub) {
                 //var subFunction = cat.controls.subFunction.node().value;
-                explorer.currentChart = window[renderer.main][renderer.sub](
-                    explorer.element + ' .chartWrap',
+                this.currentChart = window[renderer.main][renderer.sub](
+                    this.element + ' .chartWrap',
                     renderer.settings
                 );
             } else {
-                explorer.currentChart = window[renderer.main](
-                    explorer.element + ' .chartWrap',
+                this.currentChart = window[renderer.main](
+                    this.element + ' .chartWrap',
                     renderer.settings
                 );
             }
-            explorer.currentChart.key = renderer.name;
-            explorer.currentChart.renderer = renderer;
+            this.currentChart.key = renderer.name;
+            this.currentChart.renderer = renderer;
 
             if (renderer.dataFile) {
-                explorer.currentChart.init(renderer.dataFile.raw.map(d => Object.assign({}, d)));
+                this.currentChart.init(renderer.dataFile.raw.map(d => Object.assign({}, d)));
             } else {
-                explorer.currentChart.init();
+                this.currentChart.init();
             }
 
             //call the chartinit callback
-            explorer.events.onChartinit.call(explorer);
+            this.events.onChartinit.call(this);
         };
 
         //add destroy method
-        renderer.destroy = function() {};
+        renderer.destroy = () => {};
     });
 }

@@ -3,13 +3,13 @@
 // chartSettings.imported
 // renderer.settings
 
-export function prepSettings(explorer) {
-    explorer.charts.renderers.forEach(function(renderer) {
-        var customMatch = explorer.config.chartSettings.custom
-            ? explorer.config.chartSettings.custom.filter(f => f.renderer_name == renderer.name)
+export function prepSettings() {
+    this.charts.renderers.forEach(renderer => {
+        const customMatch = this.config.chartSettings.custom
+            ? this.config.chartSettings.custom.filter(f => f.renderer_name == renderer.name)
             : [];
-        var importedMatch = explorer.config.chartSettings.imported
-            ? explorer.config.chartSettings.imported.filter(f => f.renderer_name == renderer.name)
+        const importedMatch = this.config.chartSettings.imported
+            ? this.config.chartSettings.imported.filter(f => f.renderer_name == renderer.name)
             : [];
 
         if (customMatch.length) {
@@ -20,5 +20,5 @@ export function prepSettings(explorer) {
     });
 
     //initialize user settings customizations
-    explorer.events.onChartconfig.call(explorer);
+    this.events.onChartconfig.call(this);
 }
